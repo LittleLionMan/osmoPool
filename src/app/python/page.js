@@ -1,13 +1,20 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavBar } from "@/components/NavBar";
-import Plot from 'react-plotly.js'; // Import Plotly.js for creating plots
 
 export default function Python() {
     const [poolId, setPoolId] = useState('');
     const [plotData, setPlotData] = useState(null);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        import('react-plotly.js').then(Plot => {
+            setPlotLibrary(Plot);
+        });
+    }, []);
+
+    const [Plot, setPlotLibrary] = useState(null);
 
     const handleSearch = async () => {
         try {
@@ -58,7 +65,7 @@ export default function Python() {
                 </div>
             </form>
 
-            {plotData && (
+            {plotData && Plot && (
                 <div>
                     <h2>Plot:</h2>
                     <Plot
